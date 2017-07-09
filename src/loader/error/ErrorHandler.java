@@ -21,7 +21,7 @@ public class ErrorHandler {
         errorList.clear();
     }
 
-    public ErrorHandler getInstance() {
+    public static ErrorHandler getInstance() {
         if (instance == null) instance = new ErrorHandler();
         return instance;
     }
