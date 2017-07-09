@@ -6,9 +6,10 @@ import java.util.ArrayList;
  * Created by Sergiusz on 07.07.2017.
  */
 public class ErrorHandler {
+    private static ErrorHandler instance = null;
     private ArrayList<Error> errorList;
 
-    public ErrorHandler() {
+    private ErrorHandler() {
         errorList = new ArrayList<>();
     }
 
@@ -18,5 +19,10 @@ public class ErrorHandler {
 
     public void clearErrorList() {
         errorList.clear();
+    }
+
+    public ErrorHandler getInstance() {
+        if (instance == null) instance = new ErrorHandler();
+        return instance;
     }
 }
