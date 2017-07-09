@@ -7,5 +7,6 @@ import loader.Image;
  */
 public interface FeatureDescriptor {
     FeatureData describe();
+    Image getSource();
     void loadSource(Image src);
 }
