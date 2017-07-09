@@ -34,8 +34,15 @@ public class FileLoader {
     }
 
     public BufferedImage loadFromInternalResource(String projectPath) {
-        URL url = getClass().getResource(projectPath);
-        File img = new File(url.getPath());
+        File img;
+
+        try {
+            URL url = getClass().getResource(projectPath);
+            img = new File(url.getPath());
+        } catch (NullPointerException e) {
+            errorHandler.handle(new Error("Unable to find resource: "+projectPath, ErrorType.IMPORTANT));
+            return null;
+        }
 
         BufferedImage src = null;
 
