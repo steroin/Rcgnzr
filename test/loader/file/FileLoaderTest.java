@@ -20,7 +20,7 @@ public class FileLoaderTest {
     @Test
     public void loadFromInternalResource() throws Exception {
         FileLoader loader = new FileLoader(ErrorHandler.getInstance());
-        BufferedImage src = loader.loadFromInternalResource("/java.png");
+        BufferedImage src = loader.loadFromInternalResource("/loader/file/java.png");
         Assert.assertNotNull(src);
     }
 
