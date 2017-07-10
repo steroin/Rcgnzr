@@ -3,10 +3,10 @@ package descriptor;
 /**
  * Created by Sergiusz on 09.07.2017.
  */
-public class FeatureData {
+public class FeatureDescriptionResult {
     private double[] vector;
 
-    public FeatureData(double[] vec) {
+    public FeatureDescriptionResult(double[] vec) {
          this.vector = vec;
     }
 
