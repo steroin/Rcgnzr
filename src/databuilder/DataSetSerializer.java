@@ -32,18 +32,17 @@ public class DataSetSerializer {
         ArrayList<double[]> features = dataSet.getFeatures();
         ArrayList<Double> classes = dataSet.getClassifications();
 
-        try {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(destination))) {
-                for (int i = 0; i < features.size(); i++) {
-                    double[] vector = features.get(i);
 
-                    for (int j = 0; j < vector.length; j++) {
-                        bw.write(vector[j]+"");
-                        if (j < vector.length - 1) bw.write(";");
-                    }
-                    bw.write(" "+classes.get(i));
-                    bw.newLine();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(destination))) {
+            for (int i = 0; i < features.size(); i++) {
+                double[] vector = features.get(i);
+
+                for (int j = 0; j < vector.length; j++) {
+                    bw.write(vector[j]+"");
+                    if (j < vector.length - 1) bw.write(";");
                 }
+                bw.write(" "+classes.get(i));
+                bw.newLine();
             }
         } catch(IOException e) {
             errorHandler.handle(new Error("DataSetSerializer error: cannot access destination file.", ErrorType.IMPORTANT));
@@ -52,5 +51,39 @@ public class DataSetSerializer {
 
     public DataSet deserialize(File source) {
 
+        try (BufferedReader br = new BufferedReader(new FileReader(source))) {
+            int vectorSize = 0;
+            int classesNum = 0;
+            ArrayList<double[]> features = new ArrayList<>();
+            ArrayList<Double> classes = new ArrayList<>();
+
+            String line = br.readLine();
+            while (line != null) {
+                String[] split = line.split(" ");
+                String[] vector = split[0].split(";");
+                double[] parsedVector = new double[vector.length];
+                double cls = Double.parseDouble(split[1]);
+
+                for (int i = 0; i < vector.length; i++) {
+                    parsedVector[i] = Double.parseDouble(vector[i]);
+                }
+                if (vectorSize == 0) {
+                    vectorSize = parsedVector.length;
+                }
+                if (!classes.contains(cls)) {
+                    classesNum ++;
+                }
+
+                features.add(parsedVector);
+                classes.add(cls);
+                line = br.readLine();
+            }
+            return new DataSet(classesNum, vectorSize, features, classes);
+        } catch (IOException e) {
+            errorHandler.handle(new Error("DataSetSerializer error: cannot access source file", ErrorType.IMPORTANT));
+        } catch (NumberFormatException e) {
+            errorHandler.handle(new Error("DataSetSerializer error: source file has wrong format"));
+        }
+        return null;
     }
 }
