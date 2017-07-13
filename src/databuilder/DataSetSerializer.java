@@ -78,7 +78,7 @@ public class DataSetSerializer {
                 classes.add(cls);
                 line = br.readLine();
             }
-            return new DataSet(classesNum, vectorSize, features, classes);
+            return new DataSet(classesNum, vectorSize, features, classes, errorHandler);
         } catch (IOException e) {
             errorHandler.handle(new Error("DataSetSerializer error: cannot access source file", ErrorType.IMPORTANT));
         } catch (NumberFormatException e) {

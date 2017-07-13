@@ -1,5 +1,9 @@
 package databuilder;
 
+import loader.error.Error;
+import loader.error.ErrorHandler;
+import loader.error.ErrorType;
+
 import java.util.ArrayList;
 
 /**
@@ -10,16 +14,18 @@ public class DataSet {
     private int featureVectorSize;
     private ArrayList<double[]> features;
     private ArrayList<Double> classes;
+    private ErrorHandler errorHandler;
 
-    public DataSet(int c, int fvs, ArrayList<double[]> featuresList, ArrayList<Double> classesList) {
+    public DataSet(int c, int fvs, ArrayList<double[]> featuresList, ArrayList<Double> classesList, ErrorHandler handler) {
         classesNum = c;
         featureVectorSize = fvs;
         features = featuresList;
         classes = classesList;
+        errorHandler = handler;
     }
 
-    public DataSet(int c, int fvs) {
-        this(c, fvs, new ArrayList<>(), new ArrayList<>());
+    public DataSet(int c, int fvs, ErrorHandler handler) {
+        this(c, fvs, new ArrayList<>(), new ArrayList<>(), handler);
     }
 
     public void addData(double[] featureVector, double classification) throws InvalidDataFormatException {
@@ -61,5 +67,21 @@ public class DataSet {
         }
 
         return true;
+    }
+
+    public void merge(DataSet set) {
+        if (set.featureVectorSize != featureVectorSize) {
+            errorHandler.handle(new Error("DataSet merge error: target DataSet has different size", ErrorType.IMPORTANT));
+            return;
+        }
+        ArrayList<Double> setClasses = set.getClassifications();
+        for (double cls : setClasses) {
+            if (!classes.contains(cls)) {
+                classesNum++;
+            }
+        }
+
+        features.addAll(set.getFeatures());
+        classes.addAll(setClasses);
     }
 }

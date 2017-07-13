@@ -23,7 +23,7 @@ public class DataSetSerializerTest {
     public void setUp() {
         int classes = 4;
         int vectorSize = 20;
-        DataSet set = new DataSet(classes, vectorSize);
+        DataSet set = new DataSet(classes, vectorSize, ErrorHandler.getInstance());
 
 
         for (int i = 0; i < 10; i++) {
