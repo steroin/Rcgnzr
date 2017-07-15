@@ -7,7 +7,8 @@ public class NeuralNetwork {
     private int inputs;
     private int layers;
     private double[][][] body;
-
+    private final double alfa = 2.0;    //alfa parameter of sigmoidal activation function
+    private final double biasValue = 1.0;
 
 
     public NeuralNetwork(int inputs, int layers, int[] topology) {
@@ -17,7 +18,7 @@ public class NeuralNetwork {
 
         for (int i = 0; i < layers; i++) {
             int weights = i == 0 ? inputs : topology[i - 1];
-            body[i] = new double[topology[i]][weights];
+            body[i] = new double[topology[i]][weights + 1];
         }
     }
 
@@ -37,11 +38,13 @@ public class NeuralNetwork {
         for (int i = 0; i < input.length; i++) {
             sum += input[i] * body[layer][neuron][i];
         }
+        int biasIndex = body[layer][neuron].length-1;
+        sum += biasValue * body[layer][neuron][biasIndex];
         return sum;
     }
 
     private double activate(double input) {
-        return input;
+        return 1 / (1 + Math.pow(Math.E, -alfa * input));
     }
 
     public double[] respond(double[] input) {
@@ -59,65 +62,8 @@ public class NeuralNetwork {
         }
         return localResponse;
     }
-    /*private double[][] neuronMatrix;
-    private double trainingFactor;
 
-    public NeuralNetwork(int in, int out) {
-        inputs = in;
-        outputs = out;
-        neuronMatrix = new double[outputs][inputs];
-        trainingFactor = 0.1;
+    public void train(double[] input, double expectedResponse) {
 
-        for(int i = 0; i < outputs; i++) {
-            for (int j = 0; j < inputs; j++) {
-                neuronMatrix[i][j] = Math.random();
-            }
-        }
     }
-
-    public double[] response(double[] inputVector) {
-        double[] response = new double[outputs];
-
-        for (int i = 0; i < outputs; i++) {
-            double y = 0;
-            for (int j = 0; j < inputs; j++) {
-                y += inputVector[j] * neuronMatrix[i][j];
-            }
-            response[i] = y;
-        }
-        return response;
-    }
-
-    public int classify(double[] response) {
-        double max = Double.NEGATIVE_INFINITY;
-        int result = -1;
-
-        for (int i = 0; i < response.length; i++) {
-            if (response[i] > max) {
-                max = response[i];
-                result = i;
-            }
-        }
-        return result;
-    }
-
-    public void trainExample(double[] inputVector, int expectedClassification) {
-        double[] response = response(inputVector);
-        int classification = classify(response);
-
-        if (classification != expectedClassification) {
-            double[] expectedResponse = new double[response.length];
-
-            for (int i = 0; i < expectedResponse.length; i++) {
-                expectedResponse[i] = i == expectedClassification ? 1 : 0;
-            }
-
-            for (int i = 0; i < outputs; i++) {
-                double error = 0;
-                for (int j = 0; j < inputs; j++) {
-                   // error += 0.5 * () * ();
-                }
-            }
-        }
-    }*/
 }
