@@ -34,7 +34,7 @@ public class DataSetSerializerTest {
             }
         }
         dataSet = set;
-        source = new File(getClass().getResource("/databuilder/example_data_source.txt").getPath());
+        source = new File(getClass().getResource("/data_builder/example_data_source.txt").getPath());
     }
 
     @Test
