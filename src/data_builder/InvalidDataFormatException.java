@@ -1,4 +1,4 @@
-package databuilder;
+package data_builder;
 
 /**
  * Created by Sergiusz on 11.07.2017.

@@ -1,4 +1,4 @@
-package inferer.neuralnetwork;
+package inferer.neural_network;
 
 /**
  * Created by Sergiusz on 10.07.2017.

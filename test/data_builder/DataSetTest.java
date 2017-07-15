@@ -1,10 +1,8 @@
-package databuilder;
+package data_builder;
 
 import loader.error.ErrorHandler;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Sergiusz on 13.07.2017.

@@ -1,4 +1,4 @@
-package databuilder;
+package data_builder;
 
 import loader.error.Error;
 import loader.error.ErrorHandler;

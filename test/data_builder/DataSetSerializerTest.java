@@ -1,16 +1,12 @@
-package databuilder;
+package data_builder;
 
 import loader.error.ErrorHandler;
-import loader.file.FileLoader;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
-import java.net.URL;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Sergiusz on 11.07.2017.

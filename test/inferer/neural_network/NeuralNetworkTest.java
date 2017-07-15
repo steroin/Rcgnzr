@@ -1,9 +1,7 @@
-package inferer.neuralnetwork;
+package inferer.neural_network;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Sergiusz on 15.07.2017.
