@@ -7,17 +7,27 @@ public class NeuralNetwork {
     private int inputs;
     private int layers;
     private double[][][] body;
+    private double[] cachedInput;
     private double[][] cachedResponses;
     private double[][] errors;
-    private final double alfa = 0.1;    //alfa parameter of sigmoidal activation function
-    private final double biasValue = 1.0;
+    private final double alfa;    //alfa parameter of sigmoidal activation function
+    private final double biasValue;
+    private final double learningRate;
 
 
     public NeuralNetwork(int inputs, int layers, int[] topology) {
+        this(inputs, layers, topology, 1.0, 1.0, 0.2);
+    }
+
+    public NeuralNetwork(int inputs, int layers, int[] topology, double alfa, double biasValue, double learningRate) {
         this.inputs = inputs;
         this.layers = layers;
+        this.alfa = alfa;
+        this.biasValue = biasValue;
+        this.learningRate = learningRate;
         body = new double[layers][][];
         errors = new double[layers][];
+        cachedInput = new double[inputs];
         cachedResponses = new double[layers][];
 
         for (int i = 0; i < layers; i++) {
@@ -63,6 +73,8 @@ public class NeuralNetwork {
         double[] localResponse = null;
         double currentResponse;
 
+        cachedInput = input;
+
         for (int i = 0; i < layers; i++) {
             outputs = body[i].length;
             localResponse = new double[outputs];
@@ -93,8 +105,17 @@ public class NeuralNetwork {
             }
         }
     }
-    public void train(double[] input, double expectedResponse) {
 
+    private void updateWeights() {
+        for (int i = 0; i < body.length; i++) {
+            double[] input = i == 0 ? cachedInput : cachedResponses[i - 1];
+            for (int j = 0; j < body[i].length; j++) {
+                for (int k = 0; k < body[i][j].length - 1; k++) {
+                    body[i][j][k] = body[i][j][k] + learningRate * errors[i][j] * input[j];
+                }
+                body[i][j][body[i][j].length - 1] = body[i][j][body[i][j].length - 1] + learningRate * errors[i][j] * biasValue;
+            }
+        }
     }
 
     public double[][] getErrors() {
