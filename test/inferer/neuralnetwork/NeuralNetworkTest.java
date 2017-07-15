@@ -57,8 +57,8 @@ public class NeuralNetworkTest {
         double[] input = new double[] {6, 4, 5, 8, 1};
         double[] expectedOutput = new double[]{0.6, 0.4, 0.2, 0.6};
         double[][] expectedErrors = new double[][]{
-                {-0.02861423693, -0.02150704204, -0.02834456121, -0.01901399856},
-                {0.0129307, -0.039424, -0.09023835, -0.08758725691}
+                {-0.0134, -0.0097, -0.014473, -0.01718},
+                {0.0129307, -0.039424, -0.09023835, 0.01123985362}
         };
 
         nn.setUpWeights(body);
@@ -66,12 +66,8 @@ public class NeuralNetworkTest {
         nn.calculateErrors(output, expectedOutput);
         double[][] errors = nn.getErrors();
 
-        for (double[] layer : errors) {
-            for (double neuron : layer) {
-                System.out.println(neuron);
-            }
-            System.out.println("------------");
-        }
+        Assert.assertArrayEquals(errors[0], expectedErrors[0], 0.01);
+        Assert.assertArrayEquals(errors[1], expectedErrors[1], 0.01);
     }
 
 }
