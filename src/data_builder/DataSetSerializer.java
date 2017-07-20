@@ -41,7 +41,7 @@ public class DataSetSerializer {
                     bw.write(vector[j]+"");
                     if (j < vector.length - 1) bw.write(";");
                 }
-                bw.write(" "+classes.get(i));
+                bw.write(";"+classes.get(i));
                 bw.newLine();
             }
         } catch(IOException e) {
@@ -59,12 +59,11 @@ public class DataSetSerializer {
 
             String line = br.readLine();
             while (line != null) {
-                String[] split = line.split(" ");
-                String[] vector = split[0].split(";");
-                double[] parsedVector = new double[vector.length];
-                double cls = Double.parseDouble(split[1]);
+                String[] vector = line.split(";");
+                double[] parsedVector = new double[vector.length - 1];
+                double cls = Double.parseDouble(vector[vector.length - 1]);
 
-                for (int i = 0; i < vector.length; i++) {
+                for (int i = 0; i < vector.length - 1; i++) {
                     parsedVector[i] = Double.parseDouble(vector[i]);
                 }
                 if (vectorSize == 0) {

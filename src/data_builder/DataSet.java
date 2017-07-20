@@ -84,4 +84,12 @@ public class DataSet {
         features.addAll(set.getFeatures());
         classes.addAll(setClasses);
     }
+
+    public int getClassesNum() {
+        return classesNum;
+    }
+
+    public int getFeatureVectorSize() {
+        return featureVectorSize;
+    }
 }
