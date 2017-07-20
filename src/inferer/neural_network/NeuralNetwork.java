@@ -10,13 +10,13 @@ public class NeuralNetwork {
     private double[] cachedInput;
     private double[][] cachedResponses;
     private double[][] errors;
-    private final double alfa;    //alfa parameter of sigmoidal activation function
-    private final double biasValue;
-    private final double learningRate;
+    private double alfa;    //alfa parameter of sigmoidal activation function
+    private double biasValue;
+    private double learningRate;
 
 
     public NeuralNetwork(int inputs, int layers, int[] topology) {
-        this(inputs, layers, topology, 1.0, 1.0, 0.2);
+        this(inputs, layers, topology, 0.1, 1.0, 0.2);
     }
 
     public NeuralNetwork(int inputs, int layers, int[] topology, double alfa, double biasValue, double learningRate) {
@@ -106,7 +106,7 @@ public class NeuralNetwork {
         }
     }
 
-    private void updateWeights() {
+    public void updateWeights() {
         for (int i = 0; i < body.length; i++) {
             double[] input = i == 0 ? cachedInput : cachedResponses[i - 1];
             for (int j = 0; j < body[i].length; j++) {
@@ -120,5 +120,47 @@ public class NeuralNetwork {
 
     public double[][] getErrors() {
         return errors;
+    }
+
+    public int getKeenResponse(double[] input) {
+        double[] output = respond(input);
+        int ret = 0;
+        double max = output[0];
+
+        for (int i = 1; i < output.length; i++) {
+            if (output[i] > max) {
+                ret = i;
+                max = output[i];
+            }
+        }
+        return ret;
+    }
+
+    public int getOutputs() {
+        return body[body.length - 1].length;
+    }
+
+    public double getAlfa() {
+        return alfa;
+    }
+
+    public void setAlfa(double alfa) {
+        this.alfa = alfa;
+    }
+
+    public double getBiasValue() {
+        return biasValue;
+    }
+
+    public void setBiasValue(double biasValue) {
+        this.biasValue = biasValue;
+    }
+
+    public double getLearningRate() {
+        return learningRate;
+    }
+
+    public void setLearningRate(double learningRate) {
+        this.learningRate = learningRate;
     }
 }

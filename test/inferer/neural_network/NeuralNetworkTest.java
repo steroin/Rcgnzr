@@ -10,7 +10,7 @@ public class NeuralNetworkTest {
 
     @Test
     public void respond() throws Exception {
-        NeuralNetwork nn = new NeuralNetwork(5, 2, new int[]{4, 4});
+        NeuralNetwork nn = new NeuralNetwork(5, 2, new int[]{4, 4}, 0.1, 1.0, 0.2);
         double[][][] body = new double[][][]{
                 {
                         {0.4, 0.25, 0.45, 0.9, 0.1, 0.1},
@@ -36,7 +36,7 @@ public class NeuralNetworkTest {
 
     @Test
     public void calculateErrors() throws Exception {
-        NeuralNetwork nn = new NeuralNetwork(5, 2, new int[]{4, 4});
+        NeuralNetwork nn = new NeuralNetwork(5, 2, new int[]{4, 4}, 0.1, 1.0, 0.2);
         double[][][] body = new double[][][]{
                 {
                         {0.4, 0.25, 0.45, 0.9, 0.1, 0.1},
