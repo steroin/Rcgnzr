@@ -100,6 +100,13 @@ public class HOGDescriptor implements FeatureDescriptor {
         return new FeatureDescriptionResult(features);
     }
 
+    @Override
+    public void setSource(BufferedImage image) {
+        source = image;
+        width = source.getWidth();
+        height = source.getHeight();
+    }
+
     public double[] getHistogram(int blockX, int blockY, double[][] magnitudes, double[][] directions) {
         double[] histogram = new double[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -114,4 +121,5 @@ public class HOGDescriptor implements FeatureDescriptor {
         }
         return histogram;
     }
+
 }
