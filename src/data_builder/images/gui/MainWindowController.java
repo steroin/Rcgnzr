@@ -1,14 +1,11 @@
 package data_builder.images.gui;
 
-import data_builder.DataSet;
 import data_builder.images.logic.DataSetBuilder;
 import data_builder.images.logic.ImageManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-
-import java.io.File;
 
 /**
  * Created by Sergiusz on 21.07.2017.
@@ -53,10 +50,35 @@ public class MainWindowController {
 
     private ImageManager manager;
     private DataSetBuilder dataSetBuilder;
+    private int happyNum;
+    private int sadNum;
+    private int angryNum;
+    private int surprisedNum;
+    private int noEmotionsNum;
+    private int otherNum;
 
     public MainWindowController() {
         manager = new ImageManager("C:/Users/Sergiusz/Documents/imgs");
         manager.init();
-        dataSetBuilder = new DataSetBuilder("C:/Users/Sergiusz/Documents/imgs/dataSet.txt");
+        dataSetBuilder = new DataSetBuilder("C:/Users/Sergiusz/Documents/imgs/dataSet.txt", "C:/Users/Sergiusz/Documents/imgs/dataSetInfo.txt");
+        happyNum = 0;
+        sadNum = 0;
+        angryNum = 0;
+        surprisedNum = 0;
+        noEmotionsNum = 0;
+        otherNum = 0;
+
+        for (double cls : dataSetBuilder.getDataSet().getClassifications()) {
+            if (cls == 0) happyNum++;
+            else if (cls == 1) sadNum++;
+            else if (cls == 2) angryNum++;
+            else if (cls == 3) surprisedNum++;
+            else if (cls == 4) noEmotionsNum++;
+            else otherNum ++;
+        }
+    }
+
+    private void refreshView() {
+        
     }
 }

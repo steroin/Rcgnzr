@@ -21,30 +21,32 @@
           <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ScrollPane fx:id="canvas" prefHeight="200.0" prefWidth="679.0" GridPane.columnSpan="2" />
+            <ScrollPane fx:id="canvas" prefHeight="451.0" prefWidth="728.0" GridPane.columnSpan="2" />
             <GridPane GridPane.columnSpan="2" GridPane.rowIndex="2">
               <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="117.0" />
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="81.0" minWidth="10.0" prefWidth="70.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="84.0" minWidth="10.0" prefWidth="63.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="26.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="79.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="118.0" minWidth="10.0" prefWidth="86.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="84.0" minWidth="10.0" prefWidth="82.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="93.0" minWidth="7.0" prefWidth="87.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="133.0" minWidth="10.0" prefWidth="84.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="149.0" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="122.0" minWidth="10.0" prefWidth="72.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="198.0" minWidth="10.0" prefWidth="78.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="132.0" minWidth="0.0" prefWidth="0.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                   <Button fx:id="but_prev" mnemonicParsing="false" text="Previous" />
-                  <Button fx:id="but_happy" mnemonicParsing="false" text="Happy" GridPane.columnIndex="1" />
-                  <Button fx:id="but_sad" mnemonicParsing="false" text="Sad" GridPane.columnIndex="2" />
-                  <Button fx:id="but_angry" mnemonicParsing="false" text="Angry" GridPane.columnIndex="3" />
-                  <Button fx:id="but_surprised" mnemonicParsing="false" text="Surprised" GridPane.columnIndex="4" />
-                   <Button fx:id="but_no_emotions" mnemonicParsing="false" text="No emotions" GridPane.columnIndex="5" />
-                  <Button fx:id="but_other" mnemonicParsing="false" text="Other" GridPane.columnIndex="6" />
-                  <Button fx:id="but_next" mnemonicParsing="false" text="Next" GridPane.columnIndex="7" />
+                   <Button fx:id="but_prev" mnemonicParsing="false" prefHeight="25.0" prefWidth="76.0" text="Previous" GridPane.columnIndex="1" />
+                  <Button fx:id="but_happy" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Happy" GridPane.columnIndex="2" />
+                  <Button fx:id="but_sad" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Sad" GridPane.columnIndex="3" />
+                  <Button fx:id="but_angry" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Angry" GridPane.columnIndex="4" />
+                  <Button fx:id="but_surprised" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Surprised" GridPane.columnIndex="5" />
+                   <Button fx:id="but_no_emotions" mnemonicParsing="false" text="No emotions" GridPane.columnIndex="6" />
+                  <Button fx:id="but_other" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" text="Other" GridPane.columnIndex="7" />
+                  <Button fx:id="but_next" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Next" GridPane.columnIndex="8" />
                </children>
             </GridPane>
             <GridPane prefHeight="85.0" prefWidth="119.0" GridPane.rowIndex="1">
