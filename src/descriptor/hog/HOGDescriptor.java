@@ -49,7 +49,7 @@ public class HOGDescriptor implements FeatureDescriptor {
                 for (int k = 0; k <36; k++) length += localFeature[k]*localFeature[k];
                 length = Math.sqrt(length);
                 for (int k = 0; k <36; k++) {
-                    features[index] = localFeature[k] / length;
+                    features[index] = length == 0 ? 0 : localFeature[k] / length;
                     index++;
                 }
             }
