@@ -5,6 +5,7 @@ import loader.error.ErrorHandler;
 import loader.error.ErrorType;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +20,10 @@ public class ImageManager {
     private List<File> listOfFiles;
     private int currentFileIndex;
     private final String[] imagesExtensions = new String[] {"png", "jpg", "jpeg", "gif"};
+    private int preferredWidth;
+    private int preferredHeight;
 
-    public ImageManager(String sourcePath) {
+    public ImageManager(String sourcePath, int width, int height) {
         File sourceDirectory = new File(sourcePath);
         listOfFiles = new ArrayList<>();
         for (File f : sourceDirectory.listFiles()) {
@@ -29,6 +32,8 @@ public class ImageManager {
             }
         }
         currentFileIndex = 0;
+        preferredWidth = width;
+        preferredHeight = height;
     }
 
     public void next() {
@@ -59,11 +64,22 @@ public class ImageManager {
     private void reloadImage() {
         File f = listOfFiles.get(currentFileIndex);
         try {
-            source = ImageIO.read(f);
+            source = scaleToProperSize(ImageIO.read(f));
         } catch (IOException e) {
             ErrorHandler.getInstance().handle(new Error("Cannot load image file", ErrorType.CRITICAL));
             e.printStackTrace();
         }
+    }
+
+    private BufferedImage scaleToProperSize(BufferedImage source) {
+        BufferedImage resized = new BufferedImage(preferredWidth, preferredHeight, source.getType());
+        Graphics2D g = resized.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(source, 0, 0, preferredWidth, preferredHeight, 0, 0, source.getWidth(),
+                source.getHeight(), null);
+        g.dispose();
+        return resized;
     }
 
     private boolean hasFileValidImageExtension(File f) {

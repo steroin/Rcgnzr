@@ -67,9 +67,9 @@ public class MainWindowController {
     private int otherNum;
 
     public MainWindowController() {
-        manager = new ImageManager("C:/Users/Sergiusz/Documents/imgs");
+        manager = new ImageManager("C:/Users/Sergiusz/Documents/imgs2", 128, 128);
         manager.init();
-        dataSetBuilder = new DataSetBuilder("C:/Users/Sergiusz/Documents/imgs/dataSet.txt", "C:/Users/Sergiusz/Documents/imgs/dataSetInfo.txt");
+        dataSetBuilder = new DataSetBuilder("C:/Users/Sergiusz/Documents/imgs2/dataSet.txt", "C:/Users/Sergiusz/Documents/imgs2/dataSetInfo.txt");
         happyNum = 0;
         sadNum = 0;
         angryNum = 0;
@@ -138,25 +138,37 @@ public class MainWindowController {
 
     public void classifyHappy() {
         dataSetBuilder.addEntry(descriptor.describe().getAsVector(), 0, manager.getCurrentImageName());
+        happyNum++;
+        refreshView();
     }
 
     public void classifySad() {
         dataSetBuilder.addEntry(descriptor.describe().getAsVector(), 1, manager.getCurrentImageName());
+        sadNum++;
+        refreshView();
     }
 
     public void classifyAngry() {
         dataSetBuilder.addEntry(descriptor.describe().getAsVector(), 2, manager.getCurrentImageName());
+        angryNum++;
+        refreshView();
     }
 
     public void classifySurprise() {
         dataSetBuilder.addEntry(descriptor.describe().getAsVector(), 3, manager.getCurrentImageName());
+        surprisedNum++;
+        refreshView();
     }
 
     public void classifyNoEmotions() {
         dataSetBuilder.addEntry(descriptor.describe().getAsVector(), 4, manager.getCurrentImageName());
+        noEmotionsNum++;
+        refreshView();
     }
 
     public void classifyOther() {
         dataSetBuilder.addEntry(descriptor.describe().getAsVector(), 5, manager.getCurrentImageName());
+        otherNum++;
+        refreshView();
     }
 }

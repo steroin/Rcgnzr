@@ -45,6 +45,7 @@ public class DataSetSerializer {
                 bw.newLine();
             }
         } catch(IOException e) {
+            e.printStackTrace();
             errorHandler.handle(new Error("DataSetSerializer error: cannot access destination file.", ErrorType.IMPORTANT));
         }
     }
@@ -79,8 +80,10 @@ public class DataSetSerializer {
             }
             return new DataSet(classesNum, vectorSize, features, classes, errorHandler);
         } catch (IOException e) {
+            e.printStackTrace();
             errorHandler.handle(new Error("DataSetSerializer error: cannot access source file", ErrorType.IMPORTANT));
         } catch (NumberFormatException e) {
+            e.printStackTrace();
             errorHandler.handle(new Error("DataSetSerializer error: source file has wrong format"));
         }
         return null;
