@@ -1,9 +1,12 @@
 package data_builder.images.gui;
 
+import data_builder.DataSet;
 import data_builder.images.logic.DataSetBuilder;
 import data_builder.images.logic.ImageManager;
 import descriptor.FeatureDescriptor;
 import descriptor.hog.HOGDescriptor;
+import inferer.neural_network.NeuralNetwork;
+import inferer.neural_network.NeuralNetworkTrainer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,6 +15,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import loader.error.ErrorHandler;
 
 /**
  * Created by Sergiusz on 21.07.2017.
@@ -65,11 +69,12 @@ public class MainWindowController {
     private int surprisedNum;
     private int noEmotionsNum;
     private int otherNum;
+    private NeuralNetwork neuralNetwork;
 
     public MainWindowController() {
-        manager = new ImageManager("C:/Users/Sergiusz/Documents/imgs2", 128, 128);
+        manager = new ImageManager("C:/Users/Sergiusz/Documents/img_database", 128, 128);
         manager.init();
-        dataSetBuilder = new DataSetBuilder("C:/Users/Sergiusz/Documents/imgs2/dataSet.txt", "C:/Users/Sergiusz/Documents/imgs2/dataSetInfo.txt");
+        dataSetBuilder = new DataSetBuilder("C:/Users/Sergiusz/Documents/img_database/dataSet.txt", "C:/Users/Sergiusz/Documents/img_database/dataSetInfo.txt");
         happyNum = 0;
         sadNum = 0;
         angryNum = 0;
@@ -86,6 +91,9 @@ public class MainWindowController {
             else if (cls == 4) noEmotionsNum++;
             else otherNum ++;
         }
+        neuralNetwork = new NeuralNetwork(dataSetBuilder.getDataSet().getFeatureVectorSize(), 2, new int[]{6, 6});
+        NeuralNetworkTrainer trainer = new NeuralNetworkTrainer(neuralNetwork, dataSetBuilder.getDataSet(), new DataSet(dataSetBuilder.getDataSet().getClassesNum(), dataSetBuilder.getDataSet().getFeatureVectorSize(), ErrorHandler.getInstance()), null);
+        trainer.train();
     }
 
     @FXML
@@ -122,6 +130,15 @@ public class MainWindowController {
         lab_num_surprised.setText(surprisedNum+"");
         lab_num_no_emotions.setText(noEmotionsNum+"");
         lab_num_other.setText(otherNum+"");
+
+        descriptor.setSource(manager.getImage());
+        double[] featureVector = descriptor.describe().getAsVector();
+
+        double[] response = neuralNetwork.respond(featureVector);
+        System.out.println(manager.getCurrentImageName()+":");
+        for (int i = 0; i < response.length; i++) {
+            System.out.println(i+": "+response[i]);
+        }
     }
 
     public void next() {

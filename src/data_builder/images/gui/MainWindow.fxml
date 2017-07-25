@@ -22,7 +22,7 @@
           <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ScrollPane fx:id="canvas" prefHeight="451.0" prefWidth="728.0" GridPane.columnSpan="2">
+            <ScrollPane fx:id="canvas" prefHeight="443.0" prefWidth="572.0" GridPane.columnSpan="2">
                <content>
                   <ImageView fx:id="image_container" fitHeight="450.0" fitWidth="491.0" pickOnBounds="true" preserveRatio="true" />
                </content></ScrollPane>

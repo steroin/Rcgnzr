@@ -16,7 +16,7 @@ public class NeuralNetwork {
 
 
     public NeuralNetwork(int inputs, int layers, int[] topology) {
-        this(inputs, layers, topology, 0.1, 1.0, 0.2);
+        this(inputs, layers, topology, 1, 1.0, 0.1);
     }
 
     public NeuralNetwork(int inputs, int layers, int[] topology, double alfa, double biasValue, double learningRate) {
@@ -36,7 +36,6 @@ public class NeuralNetwork {
             errors[i] = new double[topology[i]];
             cachedResponses[i] = new double[topology[i]];
         }
-
     }
 
     public void setUpWeights(double[][][] weights) {
@@ -47,7 +46,7 @@ public class NeuralNetwork {
         for (int i = 0; i < body.length; i++) {
             for (int j = 0; j < body[i].length; j++) {
                 for (int k = 0; k < body[i][j].length; k++) {
-                    body[i][j][k] = Math.random();
+                    body[i][j][k] = Math.random()*2 - 1;
                 }
             }
         }
@@ -59,13 +58,14 @@ public class NeuralNetwork {
         for (int i = 0; i < input.length; i++) {
             sum += input[i] * body[layer][neuron][i];
         }
-        int biasIndex = body[layer][neuron].length-1;
+        int biasIndex = body[layer][neuron].length - 1;
         sum += biasValue * body[layer][neuron][biasIndex];
         return sum;
     }
 
     private double activate(double input) {
-        return 1 / (1 + Math.pow(Math.E, -alfa * input));
+        double ret = 1 / (1 + Math.pow(Math.E, -alfa * input));
+        return ret;
     }
 
     public double[] respond(double[] input) {
@@ -100,7 +100,11 @@ public class NeuralNetwork {
 
                 for (int k = 0; k < errors[i + 1].length; k++) {    //for every error got from next layer
                     error += errors[i + 1][k] * body[i + 1][k][j] * cachedResponses[i][j] * (1 - cachedResponses[i][j]);
+                    if (Double.isNaN(error)) {
+                        double test = errors[i + 1][k] * body[i + 1][k][j] * cachedResponses[i][j] * (1 - cachedResponses[i][j]);
+                    }
                 }
+
                 errors[i][j] = error;
             }
         }

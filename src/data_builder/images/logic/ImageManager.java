@@ -19,7 +19,7 @@ public class ImageManager {
     private BufferedImage source;
     private List<File> listOfFiles;
     private int currentFileIndex;
-    private final String[] imagesExtensions = new String[] {"png", "jpg", "jpeg", "gif"};
+    private final String[] imagesExtensions = new String[] {"png", "jpg", "jpeg", "gif", "pgm"};
     private int preferredWidth;
     private int preferredHeight;
 
