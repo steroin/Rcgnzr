@@ -15,35 +15,42 @@ import loader.error.Error;
  * Created by Sergiusz on 21.07.2017.
  */
 public class DataSetBuilder {
-    private File dataSetFile;
+    private File dataSetFeaturesFile;
+    private File dataSetClassesFile;
     private File dataSetInfoFile;
     private DataSet dataSet;
     private List<String> assignedFiles;
     private boolean isDataSetEmpty;
 
 
-    public DataSetBuilder(String path, String infoPath) {
-        dataSetFile = new File(path);
+    public DataSetBuilder(String featuresPath, String classesPath, String infoPath) {
+        dataSetFeaturesFile = new File(featuresPath);
+        dataSetClassesFile = new File(classesPath);
         dataSetInfoFile = new File(infoPath);
         assignedFiles = new ArrayList<>();
         isDataSetEmpty = true;
 
         try {
-            dataSetFile.createNewFile();
+            dataSetFeaturesFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
-            ErrorHandler.getInstance().handle(new Error("Cannot load DataSet file: "+path, ErrorType.CRITICAL));
+            ErrorHandler.getInstance().handle(new Error("Cannot load DataSet features file. "+featuresPath, ErrorType.CRITICAL));
         }
-
+        try {
+            dataSetClassesFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            ErrorHandler.getInstance().handle(new Error("Cannot load DataSet classes file. "+classesPath, ErrorType.CRITICAL));
+        }
         try {
             dataSetInfoFile.createNewFile();
         }  catch (IOException e) {
             e.printStackTrace();
-            ErrorHandler.getInstance().handle(new Error("Cannot load DataSet info file: "+path, ErrorType.CRITICAL));
+            ErrorHandler.getInstance().handle(new Error("Cannot load DataSet info file: "+infoPath, ErrorType.CRITICAL));
         }
 
         DataSetSerializer serializer = new DataSetSerializer(ErrorHandler.getInstance());
-        dataSet = serializer.deserialize(dataSetFile);
+        dataSet = serializer.deserialize(dataSetFeaturesFile, dataSetClassesFile);
 
         if (dataSet.getFeatures().size() > 0) {
             isDataSetEmpty = false;
@@ -72,7 +79,7 @@ public class DataSetBuilder {
             ErrorHandler.getInstance().handle(new Error("Cannot add data to existing DataSet", ErrorType.IMPORTANT));
         }
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(dataSetFile, true))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(dataSetFeaturesFile, true))) {
             if (!isDataSetEmpty()) {
                 bw.newLine();
             }
@@ -80,7 +87,16 @@ public class DataSetBuilder {
                 bw.append(features[i] + "");
                 if (i < features.length - 1) bw.append(";");
             }
-            bw.append(";" + classification);
+        } catch (IOException e) {
+            e.printStackTrace();
+            ErrorHandler.getInstance().handle(new Error("Cannot add data to existing DataSet", ErrorType.IMPORTANT));
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(dataSetClassesFile, true))) {
+            if (!isDataSetEmpty()) {
+                bw.newLine();
+            }
+            bw.append(classification+"");
         } catch (IOException e) {
             e.printStackTrace();
             ErrorHandler.getInstance().handle(new Error("Cannot add data to existing DataSet", ErrorType.IMPORTANT));

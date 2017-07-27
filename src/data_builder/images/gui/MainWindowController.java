@@ -74,7 +74,7 @@ public class MainWindowController {
     public MainWindowController() {
         manager = new ImageManager("C:/Users/Sergiusz/Documents/img_database", 128, 128);
         manager.init();
-        dataSetBuilder = new DataSetBuilder("C:/Users/Sergiusz/Documents/img_database/dataSet.txt", "C:/Users/Sergiusz/Documents/img_database/dataSetInfo.txt");
+        dataSetBuilder = new DataSetBuilder("C:/Users/Sergiusz/Documents/img_database/dataSetFeatures.txt", "C:/Users/Sergiusz/Documents/img_database/dataSetClasses.txt","C:/Users/Sergiusz/Documents/img_database/dataSetInfo.txt");
         happyNum = 0;
         sadNum = 0;
         angryNum = 0;

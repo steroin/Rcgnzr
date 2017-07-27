@@ -3,6 +3,7 @@ package inferer.neural_network;
 import data_builder.DataSet;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sergiusz on 15.07.2017.
@@ -21,8 +22,8 @@ public class NeuralNetworkTrainer {
     }
 
     public void train() {
-        ArrayList<double[]> inputs = trainingData.getFeatures();
-        ArrayList<Double> outputs = trainingData.getClassifications();
+        List<double[]> inputs = trainingData.getFeatures();
+        List<Double> outputs = trainingData.getClassifications();
 
         neuralNetwork.randomize();
 
@@ -45,8 +46,8 @@ public class NeuralNetworkTrainer {
     }
 
     private double getErrorRate(DataSet set) {
-        ArrayList<double[]> inputs = set.getFeatures();
-        ArrayList<Double> expectedOutputs = set.getClassifications();
+        List<double[]> inputs = set.getFeatures();
+        List<Double> expectedOutputs = set.getClassifications();
         int total = 0;
         int missClassify = 0;
 

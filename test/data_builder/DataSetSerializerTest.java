@@ -13,14 +13,15 @@ import java.io.*;
  */
 public class DataSetSerializerTest {
     private DataSet dataSet;
-    private File source;
+    private File sourceFeatures;
+    private File sourceClasses;
 
     @Before
     public void setUp() {
         int classes = 4;
         int vectorSize = 20;
         DataSet set = new DataSet(classes, vectorSize, ErrorHandler.getInstance());
-
+        double[] classifications = new double[]{1, 3, 4, 1, 3, 2, 1, 2, 4, 1};
 
         for (int i = 0; i < 10; i++) {
             double[] vector = new double[vectorSize];
@@ -28,13 +29,14 @@ public class DataSetSerializerTest {
                 vector[j] = Math.random()*100;
             }
             try {
-                set.addData(vector, (int) (Math.random()*(classes-1))+1);
+                set.addData(vector, classifications[i]);
             } catch (InvalidDataFormatException e) {
                 e.printStackTrace();
             }
         }
         dataSet = set;
-        source = new File(getClass().getResource("/data_builder/example_data_source.txt").getPath());
+        sourceFeatures = new File(getClass().getResource("/data_builder/example_data_source_ft.txt").getPath());
+        sourceClasses = new File(getClass().getResource("/data_builder/example_data_source_cls.txt").getPath());
     }
 
     @Test
@@ -45,15 +47,18 @@ public class DataSetSerializerTest {
     @Test
     public void serializeAndDeserialize() {
         DataSetSerializer serializer = new DataSetSerializer(ErrorHandler.getInstance());
-        serializer.serialize(dataSet, source);
-        DataSet set = serializer.deserialize(source);
+        serializer.serialize(dataSet, sourceFeatures, sourceClasses);
+        DataSet set = serializer.deserialize(sourceFeatures, sourceClasses);
         Assert.assertTrue(dataSet.equals(set));
     }
 
     @After
     public void clearSource() {
         try {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(source))) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(sourceFeatures))) {
+                bw.write("");
+            }
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(sourceClasses))) {
                 bw.write("");
             }
         } catch (FileNotFoundException e) {

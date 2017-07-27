@@ -5,6 +5,7 @@ import loader.error.ErrorHandler;
 import loader.error.ErrorType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sergiusz on 11.07.2017.
@@ -12,11 +13,11 @@ import java.util.ArrayList;
 public class DataSet {
     private int classesNum;
     private int featureVectorSize;
-    private ArrayList<double[]> features;
-    private ArrayList<Double> classes;
+    private List<double[]> features;
+    private List<Double> classes;
     private ErrorHandler errorHandler;
 
-    public DataSet(int c, int fvs, ArrayList<double[]> featuresList, ArrayList<Double> classesList, ErrorHandler handler) {
+    public DataSet(int c, int fvs, List<double[]> featuresList, List<Double> classesList, ErrorHandler handler) {
         classesNum = c;
         featureVectorSize = fvs;
         features = featuresList;
@@ -37,18 +38,18 @@ public class DataSet {
         classes.add(classification);
     }
 
-    public ArrayList<double[]> getFeatures() {
+    public List<double[]> getFeatures() {
         return features;
     }
 
-    public ArrayList<Double> getClassifications() {
+    public List<Double> getClassifications() {
         return classes;
     }
 
     public boolean equals(DataSet set) {
         if (set == null) return false;
-        ArrayList<double[]> setFeaturesVector = set.getFeatures();
-        ArrayList<Double> setClasses = set.getClassifications();
+        List<double[]> setFeaturesVector = set.getFeatures();
+        List<Double> setClasses = set.getClassifications();
 
         if (setFeaturesVector.size() != features.size()) return false;
         if (setClasses.size() != classes.size()) return false;
@@ -74,7 +75,7 @@ public class DataSet {
             errorHandler.handle(new Error("DataSet merge error: target DataSet has different size", ErrorType.IMPORTANT));
             return;
         }
-        ArrayList<Double> setClasses = set.getClassifications();
+        List<Double> setClasses = set.getClassifications();
         for (double cls : setClasses) {
             if (!classes.contains(cls)) {
                 classesNum++;
