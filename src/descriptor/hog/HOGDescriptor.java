@@ -10,22 +10,30 @@ import java.awt.image.BufferedImage;
  */
 public class HOGDescriptor implements FeatureDescriptor {
     private BufferedImage source;
-    private HOGSettings settings;
     private int width;
     private int height;
+    private int cellWidth;
+    private int cellHeight;
+    private int blockWidth;
+    private int blockHeight;
+    private int histogramLength;
 
-    public HOGDescriptor(BufferedImage src, HOGSettings set) {
+    public HOGDescriptor(BufferedImage src, HOGSettings settings) {
         source = src;
-        settings = set;
         width = source.getWidth();
         height = source.getHeight();
+        cellWidth = settings.getCellWidth();
+        cellHeight = settings.getCellHeight();
+        blockWidth = settings.getBlockWidth();
+        blockHeight = settings.getBlockHeight();
+        histogramLength = settings.isSignedGradients() ? 18 : 9;
     }
 
-    public double[][][] calculateBlockHistograms(int width, int height, double[][] magnitudes, double[][] directions) {
-        double[][][] histograms = new double[height / 8][width / 8][9];
+    public double[][][] calculateCellHistograms(int width, int height, double[][] magnitudes, double[][] directions) {
+        double[][][] histograms = new double[height / cellHeight][width / cellWidth][histogramLength];
 
-        for (int i = 0; i < height / 8; i++) {
-            for (int j = 0; j < width / 8; j++) {
+        for (int i = 0; i < height / cellHeight; i++) {
+            for (int j = 0; j < width / cellWidth; j++) {
                 histograms[i][j] = getHistogram(i, j, magnitudes, directions);
             }
         }
@@ -33,22 +41,29 @@ public class HOGDescriptor implements FeatureDescriptor {
     }
 
     public double[] calculateFeatures(int width, int height, double[][][] histograms) {
-        double[] features = new double[(height / 8 - 1) * (width / 8 - 1) * 36];
+        int singleBlockFeatureLength = blockWidth * blockHeight * histogramLength;
+        double[] features = new double[(height / cellHeight - 1) * (width / cellWidth - 1) * singleBlockFeatureLength];
         int index = 0;
 
-        for (int i = 0; i < height / 8 - 1; i++) {
-            for (int j = 0; j < width / 8 - 1; j++) {
-                double[] localFeature = new double[36];
+        for (int i = 0; i < height / cellHeight - 1; i++) {
+            for (int j = 0; j < width / cellWidth - 1; j++) {
+                double[] localFeature = new double[singleBlockFeatureLength];
 
-                for (int k = 0; k < 8; k++) localFeature[k] = histograms[i][j][k];
-                for (int k = 0; k < 8; k++) localFeature[k+8] = histograms[i][j+1][k];
-                for (int k = 0; k < 8; k++) localFeature[k+16] = histograms[i+1][j][k];
-                for (int k = 0; k < 8; k++) localFeature[k+24] = histograms[i+1][j+1][k];
+                for (int k = 0; k < blockHeight; k++) {
+                    for (int l = 0; l < blockWidth; l++) {
+                        for (int m = 0; m < histogramLength; m++) {
+                            localFeature[(k * blockWidth + l) * histogramLength + m] = histograms[i + k][j + l][m];
+                        }
+                    }
+                }
 
                 double length = 0;
-                for (int k = 0; k <36; k++) length += localFeature[k]*localFeature[k];
+                for (int k = 0; k < singleBlockFeatureLength; k++) {
+                    length += localFeature[k]*localFeature[k];
+                }
                 length = Math.sqrt(length);
-                for (int k = 0; k <36; k++) {
+
+                for (int k = 0; k < singleBlockFeatureLength; k++) {
                     features[index] = length == 0 ? 0 : localFeature[k] / length;
                     index++;
                 }
@@ -82,8 +97,9 @@ public class HOGDescriptor implements FeatureDescriptor {
                 int hotizontalDeriv = right - left;
                 int verticalDeriv = bottom - top;
 
+                int maxDirection = histogramLength * 20;
                 magnitudes[i][j] = Math.sqrt(hotizontalDeriv * hotizontalDeriv + verticalDeriv * verticalDeriv);
-                directions[i][j] = (Math.toDegrees(Math.atan2(verticalDeriv, hotizontalDeriv)) + 180) % 180;
+                directions[i][j] = (Math.toDegrees(Math.atan2(verticalDeriv, hotizontalDeriv)) + maxDirection) % maxDirection;
             }
         }
 
@@ -95,7 +111,7 @@ public class HOGDescriptor implements FeatureDescriptor {
         double[][][] polarMatrices = countPolarMatrices(width, height, source);
         double[][] magnitudes = polarMatrices[0];
         double[][] directions = polarMatrices[1];
-        double[][][] blockHistograms = calculateBlockHistograms(width, height, magnitudes, directions);
+        double[][][] blockHistograms = calculateCellHistograms(width, height, magnitudes, directions);
         double[] features = calculateFeatures(width, height, blockHistograms);
         return new FeatureDescriptionResult(features);
     }
@@ -107,13 +123,17 @@ public class HOGDescriptor implements FeatureDescriptor {
         height = source.getHeight();
     }
 
-    public double[] getHistogram(int blockX, int blockY, double[][] magnitudes, double[][] directions) {
-        double[] histogram = new double[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+    public double[] getHistogram(int cellX, int cellY, double[][] magnitudes, double[][] directions) {
+        double[] histogram = new double[histogramLength];
 
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                int x = blockX * 8 + i;
-                int y = blockY * 8 + j;
+        for (int i = 0; i < histogram.length; i++) {
+            histogram[i] = 0;
+        }
+
+        for (int i = 0; i < cellHeight; i++) {
+            for (int j = 0; j < cellWidth; j++) {
+                int x = cellX * cellHeight + i;
+                int y = cellY * cellWidth + j;
                 int histogramIndex = (int) (directions[x][y] / 20);
                 histogram[histogramIndex] = histogram[histogramIndex] + (1 - (directions[x][y] % 20) / 20) * magnitudes[x][y];
                 histogram[(histogramIndex + 1) % histogram.length] = ((directions[x][y] % 20) / 20) * magnitudes[x][y];

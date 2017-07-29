@@ -14,12 +14,10 @@ public class HOGDescriptorTest {
     public void describe() throws Exception {
         FileLoader loader = new FileLoader(ErrorHandler.getInstance());
         BufferedImage src = loader.loadFromInternalResource("/descriptor/hog/test_hog_5.png");
-        HOGDescriptor descriptor = new HOGDescriptor(src, null);
+        HOGDescriptor descriptor = new HOGDescriptor(src, HOGSettings.DEFAULT);
         long start = System.currentTimeMillis();
         double[] hog = descriptor.describe().getAsVector();
         long stop = System.currentTimeMillis();
-
-        System.out.println((stop-start)+" ms");
     }
 
     @Test
