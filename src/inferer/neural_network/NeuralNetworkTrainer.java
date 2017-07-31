@@ -11,14 +11,12 @@ import java.util.List;
 public class NeuralNetworkTrainer {
     private NeuralNetwork neuralNetwork;
     private DataSet trainingData;
-    private DataSet validationData;
-    private DataSet testData;
+    private int epochs;
 
-    public NeuralNetworkTrainer(NeuralNetwork nn, DataSet training, DataSet validation, DataSet test) {
-        neuralNetwork = nn;
-        trainingData = training;
-        validationData = validation;
-        testData = test;
+    public NeuralNetworkTrainer(NeuralNetwork neuralNetwork, DataSet trainingData, int epochs) {
+        this.neuralNetwork = neuralNetwork;
+        this.trainingData = trainingData;
+        this.epochs = epochs;
     }
 
     public void train() {
@@ -27,11 +25,14 @@ public class NeuralNetworkTrainer {
 
         neuralNetwork.randomize();
 
-        for (int i = 0; i < inputs.size(); i++) {
-            double[] expectedOutput = buildOutputVector(outputs.get(i).intValue());
-            double[] output = neuralNetwork.respond(inputs.get(i));
-            neuralNetwork.calculateErrors(output, expectedOutput);
-            neuralNetwork.updateWeights();
+        for (int i = 0; i < epochs; i++) {
+            for (int j = 0; j < inputs.size(); j++) {
+                double[] expectedOutput = buildOutputVector(outputs.get(j).intValue());
+                double[] output = neuralNetwork.respond(inputs.get(j));
+                neuralNetwork.calculateErrors(output, expectedOutput);
+                neuralNetwork.updateWeights();
+            }
+            trainingData.shuffle();
         }
     }
 
@@ -45,7 +46,7 @@ public class NeuralNetworkTrainer {
         return outputVector;
     }
 
-    private double getErrorRate(DataSet set) {
+    public double getErrorRate(DataSet set) {
         List<double[]> inputs = set.getFeatures();
         List<Double> expectedOutputs = set.getClassifications();
         int total = 0;
@@ -74,31 +75,5 @@ public class NeuralNetworkTrainer {
             }
         }
         return maxIndex;
-    }
-
-    public double[] chooseParameters(double[] alfaParams, double[] biasValueParams, double[] learningRateParams) {
-        double[] bestParams = new double[3];
-        double bestError = Double.POSITIVE_INFINITY;
-
-        for (double alfa : alfaParams) {
-            neuralNetwork.setAlfa(alfa);
-            for (double biasValue : biasValueParams) {
-                neuralNetwork.setBiasValue(biasValue);
-                for (double learningRate : learningRateParams) {
-                    train();
-                    neuralNetwork.setLearningRate(learningRate);
-                    double error = getErrorRate(validationData);
-                    if (error < bestError) {
-                        bestError = error;
-                        bestParams[0] = alfa;
-                        bestParams[1] = biasValue;
-                        bestParams[2] = learningRate;
-                    }
-
-                }
-            }
-        }
-        System.out.println("Best params: ["+bestParams[0]+", "+bestParams[1]+", "+bestParams[2]+"] - error: "+bestError);
-        return bestParams;
     }
 }

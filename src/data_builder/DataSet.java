@@ -93,4 +93,22 @@ public class DataSet {
     public int getFeatureVectorSize() {
         return featureVectorSize;
     }
+
+    public void shuffle() {
+        int length = features.size();
+        int ranIndex;
+        double[] tempFeatures;
+        double tempCls;
+
+        for (int i = 0; i < length - 2; i++) {
+            ranIndex = (int) (Math.random() * (length - i) + i);
+            tempFeatures = features.get(ranIndex);
+            features.set(ranIndex, features.get(i));
+            features.set(i, tempFeatures);
+            tempCls = classes.get(ranIndex);
+            classes.set(ranIndex, classes.get(i));
+            classes.set(i, tempCls);
+        }
+
+    }
 }

@@ -20,8 +20,8 @@ public class HOGDescriptor implements FeatureDescriptor {
 
     public HOGDescriptor(BufferedImage src, HOGSettings settings) {
         source = src;
-        width = source.getWidth();
-        height = source.getHeight();
+        width = src == null ? 0 : source.getWidth();
+        height = src == null ? 0 : source.getHeight();
         cellWidth = settings.getCellWidth();
         cellHeight = settings.getCellHeight();
         blockWidth = settings.getBlockWidth();
@@ -141,5 +141,4 @@ public class HOGDescriptor implements FeatureDescriptor {
         }
         return histogram;
     }
-
 }
