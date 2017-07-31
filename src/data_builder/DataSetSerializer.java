@@ -110,11 +110,6 @@ public class DataSetSerializer {
                 distinctClasses.add(cls);
             }
         }
-
-        int featureVectorSize = 0;
-        if (features != null && !features.isEmpty()) {
-            featureVectorSize = features.get(0).length;
-        }
-        return new DataSet(distinctClasses.size(), featureVectorSize, features, classes, ErrorHandler.getInstance());
+        return new DataSet(features, classes, ErrorHandler.getInstance());
     }
 }

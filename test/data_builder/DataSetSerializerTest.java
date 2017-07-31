@@ -18,9 +18,8 @@ public class DataSetSerializerTest {
 
     @Before
     public void setUp() {
-        int classes = 4;
         int vectorSize = 20;
-        DataSet set = new DataSet(classes, vectorSize, ErrorHandler.getInstance());
+        DataSet set = new DataSet(ErrorHandler.getInstance());
         double[] classifications = new double[]{1, 3, 4, 1, 3, 2, 1, 2, 4, 1};
 
         for (int i = 0; i < 10; i++) {
@@ -28,11 +27,7 @@ public class DataSetSerializerTest {
             for (int j = 0; j < vectorSize; j++) {
                 vector[j] = Math.random()*100;
             }
-            try {
-                set.addData(vector, classifications[i]);
-            } catch (InvalidDataFormatException e) {
-                e.printStackTrace();
-            }
+            set.addData(vector, classifications[i]);
         }
         dataSet = set;
         sourceFeatures = new File(getClass().getResource("/data_builder/example_data_source_ft.txt").getPath());
