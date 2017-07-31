@@ -12,6 +12,7 @@ public class NeuralNetworkValidator {
     private double[] alfas;
     private double[] biasValues;
     private double[] learningRates;
+    private long timeElapsed;
 
     public NeuralNetworkValidator(NeuralNetwork neuralNetwork, NeuralNetworkTrainer trainer, DataSet validationData, double[] alfas, double[] biasValues,
                                   double[] learningRates) {
@@ -23,6 +24,7 @@ public class NeuralNetworkValidator {
     }
 
     public void chooseBestParams() {
+        timeElapsed = System.currentTimeMillis();
         double[] bestParams = new double[3];
         double bestError = Double.POSITIVE_INFINITY;
 
@@ -47,5 +49,10 @@ public class NeuralNetworkValidator {
         neuralNetwork.setAlfa(bestParams[0]);
         neuralNetwork.setBiasValue(bestParams[1]);
         neuralNetwork.setLearningRate(bestParams[2]);
+        timeElapsed = System.currentTimeMillis() - timeElapsed;
+    }
+
+    public long getTimeElapsed() {
+        return timeElapsed;
     }
 }

@@ -12,6 +12,7 @@ public class NeuralNetworkTrainer {
     private NeuralNetwork neuralNetwork;
     private DataSet trainingData;
     private int epochs;
+    private long timeElapsed;
 
     public NeuralNetworkTrainer(NeuralNetwork neuralNetwork, DataSet trainingData, int epochs) {
         this.neuralNetwork = neuralNetwork;
@@ -20,6 +21,7 @@ public class NeuralNetworkTrainer {
     }
 
     public void train() {
+        timeElapsed = System.currentTimeMillis();
         List<double[]> inputs = trainingData.getFeatures();
         List<Double> outputs = trainingData.getClassifications();
 
@@ -34,6 +36,7 @@ public class NeuralNetworkTrainer {
             }
             trainingData.shuffle();
         }
+        timeElapsed = System.currentTimeMillis() - timeElapsed;
     }
 
     private double[] buildOutputVector(int output) {
@@ -75,5 +78,9 @@ public class NeuralNetworkTrainer {
             }
         }
         return maxIndex;
+    }
+
+    private long getTimeElapsed() {
+        return timeElapsed;
     }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 public class NeuralNetworkTester {
     private NeuralNetwork neuralNetwork;
     private DataSet testData;
+    private long timeElapsed;
 
     public NeuralNetworkTester(NeuralNetwork neuralNetwork, DataSet testData) {
         this.neuralNetwork = neuralNetwork;
@@ -17,6 +18,7 @@ public class NeuralNetworkTester {
     }
 
     public double getSuccessRate() {
+        timeElapsed = System.currentTimeMillis();
         List<double[]> features = testData.getFeatures();
         List<Double> classes = testData.getClassifications();
         int positive = 0;
@@ -27,6 +29,11 @@ public class NeuralNetworkTester {
                 positive++;
             }
         }
+        timeElapsed = System.currentTimeMillis() - timeElapsed;
         return (double) positive / features.size();
+    }
+
+    public long getTimeElapsed() {
+        return timeElapsed;
     }
 }
